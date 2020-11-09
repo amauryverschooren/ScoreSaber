@@ -1,0 +1,110 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Profile</ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button menu="menu"></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content *ngIf="!player">
+  <ion-grid style="height: 100%;">
+    <ion-row style="height: 100%;">
+      <ion-col class="ion-align-self-center">
+            <ion-searchbar [(ngModel)]="playerId" placeholder="Enter ScoreSaber ID"></ion-searchbar>
+        <div style="text-align: right;"  class="buttonDiv">
+          <ion-button (click)="getPlayerFull(playerId)" color="primary" size="default">Log-In</ion-button>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+   
+</ion-content>
+
+
+<!-- Start Profile page -->
+<ion-content *ngIf="player">
+    <img id="profileImage" [src]="player.playerInfo.avatar">
+
+    <ion-grid>
+      <ion-row class="ion-justify-content-center">
+        <ion-label>
+          {{player.playerInfo.playerName}}
+        </ion-label>
+      </ion-row>
+      <ion-row>
+        <!-- Start left column -->
+        <ion-col class="ion-align-items-center">
+          <ion-row  class="ion-justify-content-center">
+              <ion-chip>
+                <ion-icon name="globe-outline" color="dark"></ion-icon>
+                <ion-label>#</ion-label>
+                {{player.playerInfo.rank}}
+              </ion-chip>
+          </ion-row>
+          <ion-row  class="ion-justify-content-center">
+            <ion-chip>
+              <ion-icon *ngIf="weeklyChange>=0" name="arrow-up-outline" color="dark"></ion-icon>
+              <ion-icon *ngIf="weeklyChange<0" name="arrow-down-outline" color="dark"></ion-icon>
+              <ion-label *ngIf="weeklyChange<0" color="danger">{{weeklyChange}}</ion-label>
+              <ion-label *ngIf="weeklyChange>=0" color="success">{{weeklyChange}}</ion-label>
+            </ion-chip>
+          </ion-row>
+        </ion-col>
+        <!-- Start right column -->
+        <ion-col class="ion-align-items-center">
+          <ion-row  class="ion-justify-content-center">
+            <ion-chip>
+              <!-- <ion-icon name="stats-chart-outline" color="dark"></ion-icon> -->
+              <img style="width: 1.5em; margin-right: 5px;" src="{{countryFlag}}">
+              <ion-label>#</ion-label>
+              {{player.playerInfo.countryRank}}
+            </ion-chip>
+          </ion-row>
+          <ion-row  class="ion-justify-content-center">
+
+            <ion-chip>
+             
+              <ion-label style="margin-right: 5px;">{{player.playerInfo.pp}}</ion-label>
+              PP
+              
+            </ion-chip>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+      <ion-row  class="ion-justify-content-center">
+        <ion-chip>
+          <ion-icon name="checkmark-done-outline" color="dark"></ion-icon>
+          {{player.scoreStats.averageRankedAccuracy | number : '2.1-2'}}
+          <ion-label>%</ion-label>
+        </ion-chip>
+      </ion-row>
+      <!-- Top Songs Slide -->
+      <ion-row *ngIf="TopSongs">
+        <p>Top Songs</p>
+        <ion-slides [options]="{ slidesPerView: 'auto', zoom: false, grabCursor: true }">
+          <ion-slide *ngFor="let song of TopSongs.scores; let i = index" style="width: 100px; height: 100px;">
+            <ion-col>
+              <a (click)="presentAlertTop(i)">
+                <img src="https://scoresaber.com/imports/images/songs/{{song.songHash}}.png">
+              </a>
+            </ion-col>
+          </ion-slide>
+        </ion-slides>
+      </ion-row>
+      <!-- Recent Songs Slide -->
+      <ion-row *ngIf="RecentSongs">
+        <p>Recent Songs</p>
+        <ion-slides [options]="{ slidesPerView: 'auto', zoom: false, grabCursor: true }">
+          <ion-slide *ngFor="let song of RecentSongs.scores; let i = index" style="width: 100px; height: 100px;">
+            <ion-col>
+              <a (click)="presentAlertRecent(i)">
+                <img src="https://scoresaber.com/imports/images/songs/{{song.songHash}}.png">
+              </a>
+            </ion-col>
+          </ion-slide>
+        </ion-slides>
+      </ion-row>
+    </ion-grid>
+
+  
+</ion-content>
